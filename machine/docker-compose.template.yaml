@@ -1,0 +1,113 @@
+# =============================================================================
+# OpenCode AI Environment — Docker Compose Template
+# =============================================================================
+# Usage:
+#   cp docker-compose.template.yaml docker-compose.yaml
+#   # Edit docker-compose.yaml — set MODEL paths, GPU IDs, ports
+#   docker compose up -d
+# =============================================================================
+#
+# Variables you MUST customize (search "CHANGE"):
+#   - ${MODELS_DIR:-./models}         → path to your .gguf model files
+#   - ${GPU0_DEVICES:-0}              → CUDA_VISIBLE_DEVICES for GPU0
+#   - ${GPU1_DEVICES:-1}              → CUDA_VISIBLE_DEVICES for GPU1
+#   - ${MODEL_GPU0:-}                  → GGUF filename on GPU0
+#   - ${MODEL_GPU1:-}                  → GGUF filename on GPU1
+#   - ${OLLAMA_HOST_DIR:-./ollama}    → Ollama data directory
+# =============================================================================
+
+services:
+  # ── GPU0: Primary llama.cpp ────────────────────────────────────────────
+  llama-cpp:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    container_name: llama-cpp
+    restart: unless-stopped
+    runtime: nvidia
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "${LLAMA_PORT_GPU0:-11434}:8080"
+    volumes:
+      - ${MODELS_DIR:-./models}:/models:ro
+    environment:
+      - CUDA_VISIBLE_DEVICES=${GPU0_DEVICES:-0}
+      - LLAMA_ARG_FLASH_ATTN=on
+      - LLAMA_ARG_N_GPU_LAYERS=99
+      - GGML_CUDA_GRAPH_OPT=1
+
+    command: >
+      -m /models/${MODEL_GPU0:-model.gguf}
+      --host 0.0.0.0
+      --port 8080
+      --ctx-size ${CTX_SIZE_GPU0:-131072}
+      --cache-type-k q8_0
+      --cache-type-v q4_0
+      --flash-attn on
+      --parallel 1
+      --cache-reuse 256
+      -ngl 99 -t 8 -tb 4
+      --mlock
+    networks:
+      - docker_default
+
+  # ── GPU1: llama.cpp (second model / speculative) ──────────────────────
+  llama-cpp-gpu1:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    container_name: llama-cpp-gpu1
+    restart: unless-stopped
+    runtime: nvidia
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "${LLAMA_PORT_GPU1:-15433}:8080"
+    volumes:
+      - ${MODELS_DIR:-./models}:/models:ro
+    environment:
+      - CUDA_VISIBLE_DEVICES=${GPU1_DEVICES:-1}
+      - LLAMA_ARG_FLASH_ATTN=on
+      - LLAMA_ARG_N_GPU_LAYERS=99
+      - GGML_CUDA_GRAPH_OPT=1
+
+    command: >
+      -m /models/${MODEL_GPU1:-model-2.gguf}
+      --host 0.0.0.0
+      --port 8080
+      --ctx-size ${CTX_SIZE_GPU1:-262144}
+      --cache-type-k q8_0
+      --cache-type-v q4_0
+      --flash-attn on
+      --parallel 1
+      --cache-reuse 256
+      -ngl 99 -t 8 -tb 4
+      --mlock
+      # --spec-type draft-mtp
+      # --spec-draft-n-max 2
+    networks:
+      - docker_default
+
+  # ── Ollama (optional) ─────────────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    profiles:
+      - optional          # Start only with: docker compose --profile optional up
+    volumes:
+      - ${OLLAMA_HOST_DIR:-./ollama}:/root/.ollama
+    environment:
+      - CUDA_VISIBLE_DEVICES=${OLLAMA_GPU_DEVICES:-0}
+      - OLLAMA_MAX_LOADED_MODELS=2
+      - OLLAMA_NUM_PARALLEL=2
+      - OLLAMA_FLASH_ATTENTION=1
+      - OLLAMA_KV_CACHE_TYPE=q4_0
+    networks:
+      - docker_default
+
+networks:
+  docker_default:
+    name: ${DOCKER_NETWORK:-docker_default}
+    external: true
