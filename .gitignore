@@ -1,0 +1,15 @@
+# Dependencies (rebuilt by npm install)
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Backup files (created by opencode setup/update)
+*.backup-*
+*.jsonokbak

@@ -1,0 +1,88 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "lsp": true,
+    "autoupdate": "notify",
+    "plugin": [
+        "@morphllm/opencode-morph-plugin",
+        "opencode-pty",
+        "oh-my-openagent@latest",
+        "opencode-token-monitor",
+        "opencode-supermemory",
+        "opencode-acp"
+    ],
+    "provider": {
+        "gpu0-local": {
+            "npm": "@ai-sdk/openai-compatible",
+            "name": "GPU0 (Daily)",
+            "options": {
+                "baseURL": "http://127.0.0.1:11434/v1"
+            },
+            "models": {
+                "qwen3.6-27b": {
+                    "name": "Qwen3.6-27B-UD-Q4_K_XL.gguf",
+                    "options": {
+                        "cachePromptPrefix": true
+                    }
+                }
+            }
+        },
+        "gpu1-local": {
+            "npm": "@ai-sdk/openai-compatible",
+            "name": "GPU1 (Qwen3.6-35B-QAT/llama.cpp)",
+            "options": {
+                "baseURL": "http://127.0.0.1:15433/v1"
+            },
+            "models": {
+                "qwen3.6-35b": {
+                    "name": "/models/Qwen3.6-35B-A3B-UD-IQ4_XS.gguf",
+                    "options": {
+                        "cachePromptPrefix": true
+                    }
+                }
+            }
+        },
+        "deepseek": {
+            "npm": "@ai-sdk/openai-compatible",
+            "name": "DeepSeek(Myapi)",
+            "options": {
+                "baseURL": "https://api.deepseek.com",
+                "apiKey": "{env:DEEPSEEK_API_KEY}"
+            },
+            "models": {
+                "deepseek-v4-flash": {
+                    "name": "deepseek-v4-flash"
+                },
+                "deepseek-v4-pro": {
+                    "name": "deepseek-v4-pro",
+                    "options": {
+                        "thinking": {
+                            "type": "enabled"
+                        },
+                        "reasoningEffort": "high"
+                    }
+                }
+            }
+        }
+    },
+    "mcp": {
+        "gitnexus": {
+            "type": "local",
+            "enabled": false,
+            "command": [
+                "/home/bluekuma/.npm-global/bin/gitnexus",
+                "mcp"
+            ]
+        },
+        "codebase-memory-mcp": {
+            "enabled": true,
+            "type": "local",
+            "command": [
+                "/home/bluekuma/.local/bin/codebase-memory-mcp"
+            ]
+        }
+    },
+    "instructions": [
+        "node_modules/@morphllm/opencode-morph-plugin/instructions/morph-tools.md"
+    ],
+    "model": "deepseek/deepseek-v4-flash"
+}

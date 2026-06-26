@@ -1,0 +1,25 @@
+{
+  // API key (env var SUPERMEMORY_API_KEY takes precedence)
+  "apiKey": "sm_rx1PRZo2h7zEBMGgEiCCxv_b8n7Odu0ft36sV8eCsp0pdIUNzBcWexDfszDdXrhrk9flH1DeEdh9vQTmFB9JYbL",
+
+  // Min similarity for memory retrieval (0-1)
+  "similarityThreshold": 0.6,
+
+  // Max memories injected per request
+  "maxMemories": 5,
+
+  // Max project memories listed
+  "maxProjectMemories": 10,
+
+  // Max profile facts injected
+  "maxProfileItems": 5,
+
+  // Include user profile in context
+  "injectProfile": true,
+
+  // Prefix for container tags
+  "containerTagPrefix": "opencode",
+
+  // Context usage ratio that triggers compaction (0-1)
+  "compactionThreshold": 0.8
+}

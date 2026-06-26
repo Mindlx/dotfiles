@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@morphllm/opencode-morph-plugin": "^2.0.13",
+    "@opencode-ai/plugin": "^1.16.2",
+    "@tarquinen/opencode-dcp": "^3.1.12",
+    "oh-my-openagent": "^4.7.5",
+    "opencode-acp": "^1.3.1",
+    "opencode-pty": "^0.3.4",
+    "opencode-supermemory": "^2.0.6",
+    "opencode-token-monitor": "^0.5.0"
+  }
+}

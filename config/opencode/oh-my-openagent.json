@@ -1,0 +1,64 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json",
+  "agents": {
+    "hephaestus": {
+      "model": "gpu1-local/qwen3.6-35b"
+    },
+    "oracle": {
+      "model": "deepseek/deepseek-v4-pro"
+    },
+    "librarian": {
+      "model": "gpu1-local/qwen3.6-35b"
+    },
+    "explore": {
+      "model": "gpu1-local/qwen3.6-35b"
+    },
+    "multimodal-looker": {
+      "model": "deepseek/deepseek-v4-flash"
+    },
+    "prometheus": {
+      "model": "deepseek/deepseek-v4-flash"
+    },
+    "metis": {
+      "model": "deepseek/deepseek-v4-flash"
+    },
+    "momus": {
+      "model": "deepseek/deepseek-v4-flash"
+    },
+    "atlas": {
+      "model": "deepseek/deepseek-v4-flash"
+    },
+    "sisyphus-junior": {
+      "model": "gpu1-local/qwen3.6-35b"
+    },
+    "sisyphus": {
+      "model": "deepseek/deepseek-v4-flash"
+    }
+  },
+  "categories": {
+    "visual-engineering": {
+      "model": "gpu1-local/qwen3.6-35b"
+    },
+    "ultrabrain": {
+      "model": "deepseek/deepseek-v4-pro"
+    },
+    "deep": {
+      "model": "deepseek/deepseek-v4-pro"
+    },
+    "artistry": {
+      "model": "gpu1-local/qwen3.6-35b"
+    },
+    "quick": {
+      "model": "gpu1-local/qwen3.6-35b"
+    },
+    "unspecified-low": {
+      "model": "gpu1-local/qwen3.6-35b"
+    },
+    "unspecified-high": {
+      "model": "deepseek/deepseek-v4-flash"
+    },
+    "writing": {
+      "model": "gpu1-local/qwen3.6-35b"
+    }
+  }
+}
