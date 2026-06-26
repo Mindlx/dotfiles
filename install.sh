@@ -28,6 +28,14 @@ if [ -d "$REPO_DIR"/config/opencode/skill ]; then
     done
 fi
 
+# Symlink command dir
+if [ -d "$REPO_DIR"/config/opencode/command ]; then
+    mkdir -p "$CONFIG_DIR"/opencode/command
+    for f in "$REPO_DIR"/config/opencode/command/*; do
+        [ -f "$f" ] && ln -sf "$f" "$CONFIG_DIR/opencode/command/$(basename "$f")"
+    done
+fi
+
 echo "==> 2. Installing plugin dependencies..."
 cd "$CONFIG_DIR"/opencode
 if [ -f package.json ]; then
@@ -36,7 +44,14 @@ else
     echo "    package.json not found, skipping."
 fi
 
-echo "==> 3. Installing codebase-memory-mcp..."
+echo "==> 3. Installing OpenSpec CLI..."
+if command -v openspec &>/dev/null; then
+    echo "    Already installed."
+else
+    npm install -g @fission-ai/openspec@latest
+fi
+
+echo "==> 4. Installing codebase-memory-mcp..."
 if command -v codebase-memory-mcp &>/dev/null; then
     echo "    Already installed, checking update..."
     codebase-memory-mcp update 2>/dev/null || true
