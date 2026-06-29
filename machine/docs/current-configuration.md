@@ -4,8 +4,8 @@
 
 双 RTX 3090 24GB + AMD Ryzen 9 5950X + 64GB 内存
 
-GPU0 (Cuda:0) → lla-gpu0 容器 → port 11434
-GPU1 (Cuda:1) → lla-ornith35b 容器 → port 15433
+GPU0 (Cuda:0) → lla-qw35-gpu0 容器 → port 11434
+GPU1 (Cuda:1) → lla-orn-gpu1 容器 → port 15433
 
 二、模型配置
 
@@ -21,8 +21,9 @@ GPU1: Ornith-1.0-35B IQ4_XS (MoE, ~3B 活跃参数)
   - 端口: 15433
   - 量化: IQ4_XS (约 18GB)
   - 架构: MoE, 基于 Qwen3.5, 262K 上下文
-  - MTP: 无（原生不支持）
-  - 速度: ~137 t/s
+  - MTP: 无（原生不支持，用 ngram 推测解码替代）
+  - ngram-mod: n_match=24, n_max=64, n_min=48（无质量影响）
+  - 速度: ~130 t/s
   - 定位: Agent 编码、代码审查、复杂推理
 
 云端: DeepSeek
@@ -83,8 +84,8 @@ DeepSeek v4-pro 负责:
   curl -s http://localhost:11434/v1/chat/completions -d '{...}'
 
 重启某个容器:
-  docker compose -f /opt/ai-workspace/docker-compose.yaml up -d lla-gpu0
-  docker compose -f /opt/ai-workspace/docker-compose.yaml up -d lla-ornith35b
+  docker compose -f /opt/ai-workspace/docker-compose.yaml up -d lla-qw35-gpu0
+  docker compose -f /opt/ai-workspace/docker-compose.yaml up -d lla-orn-gpu1
 
 重启所有:
   docker compose -f /opt/ai-workspace/docker-compose.yaml up -d
