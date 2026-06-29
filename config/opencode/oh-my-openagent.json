@@ -11,13 +11,13 @@
       "model": "deepseek/deepseek-v4-flash"
     },
     "explore": {
-      "model": "gpu0-local/qwen3.6-35b"
+      "model": "gpu1-local/ornith-35b"
     },
     "multimodal-looker": {
       "model": "deepseek/deepseek-v4-flash"
     },
     "prometheus": {
-      "model": "deepseek/deepseek-v4-flash"
+      "model": "gpu1-local/ornith-35b"
     },
     "metis": {
       "model": "deepseek/deepseek-v4-flash"
