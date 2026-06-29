@@ -1,0 +1,102 @@
+services:
+  lla-qwen27b:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    container_name: lla-qwen27b
+    restart: unless-stopped
+    runtime: nvidia
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "11434:8080"
+    volumes:
+      - ./models:/models:ro
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - LLAMA_ARG_FLASH_ATTN=on
+      - LLAMA_ARG_N_GPU_LAYERS=99
+      - GGML_CUDA_GRAPH_OPT=1
+
+    command: >
+      -m /models/Qwen3.6-27B-UD-Q4_K_XL.gguf
+      --mmproj /models/mmproj-Qwen3.6-27B-f16.gguf
+      --host 0.0.0.0
+      --port 8080
+      --ctx-size 131072
+      --cache-type-k q8_0
+      --cache-type-v q4_0
+      --flash-attn on
+      --image-min-tokens 1024
+      --parallel 1
+      -ngl 99 -t 8 -tb 4
+      -b 2048 -ub 1024
+      --mlock
+      --no-mmap
+      --no-mmproj-offload
+      --spec-type draft-mtp
+      --spec-draft-n-max 3
+      --spec-draft-type-k q4_0
+      --spec-draft-type-v q4_0
+    networks:
+      - docker_default
+
+
+  lla-qwen35b:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    container_name: lla-qwen35b
+    restart: unless-stopped
+    runtime: nvidia
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "15433:8080"
+    volumes:
+      - ./models:/models:ro
+    environment:
+      - CUDA_VISIBLE_DEVICES=1
+      - LLAMA_ARG_FLASH_ATTN=on
+      - LLAMA_ARG_N_GPU_LAYERS=99
+      - GGML_CUDA_GRAPH_OPT=1
+
+    command: >
+      -m /models/Qwen3.6-35B-A3B-UD-IQ4_XS.gguf
+      --host 0.0.0.0
+      --port 8080
+      --ctx-size 262144
+      --cache-type-k q8_0
+      --cache-type-v q4_0
+      --flash-attn on
+      --parallel 1
+      -ngl 99 -t 8 -tb 4
+      -b 2048 -ub 1024
+      --mlock
+      --no-mmap
+      --spec-type draft-mtp
+      --spec-draft-n-max 2
+      --spec-draft-type-k q4_0
+      --spec-draft-type-v q4_0
+    networks:
+      - docker_default
+
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: ollama
+  #   restart: unless-stopped
+  #   # 端口 11434 已被 SGLang 占用，按需启动时通过 Docker 内部网络访问
+  #   volumes:
+  #     - /opt/ai-workspace/ollama:/root/.ollama
+  #   environment:
+  #     - CUDA_VISIBLE_DEVICES=0
+  #     - OLLAMA_MAX_LOADED_MODELS=2
+  #     - OLLAMA_NUM_PARALLEL=2
+  #     - OLLAMA_FLASH_ATTENTION=1
+  #     - OLLAMA_KV_CACHE_TYPE=q4_0
+  #   networks:
+  #     - docker_default
+
+networks:
+  docker_default:
+    external: true
