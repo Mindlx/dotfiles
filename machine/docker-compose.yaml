@@ -1,7 +1,7 @@
 services:
-  lla-gpu0:
+  lla-qw35-gpu0:
     image: ghcr.io/ggml-org/llama.cpp:server-cuda
-    container_name: lla-gpu0
+    container_name: lla-qw35-gpu0
     restart: unless-stopped
     runtime: nvidia
     ulimits:
@@ -39,9 +39,9 @@ services:
       - docker_default
 
 
-  lla-ornith35b:
+  lla-orn-gpu1:
     image: ghcr.io/ggml-org/llama.cpp:server-cuda
-    container_name: lla-ornith35b
+    container_name: lla-orn-gpu1
     restart: unless-stopped
     runtime: nvidia
     ulimits:
@@ -72,6 +72,8 @@ services:
       --mlock
       --no-mmap
       --jinja
+      --spec-type ngram-mod
+      --cache-reuse 256
     networks:
       - docker_default
 
