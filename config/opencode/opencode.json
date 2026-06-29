@@ -16,13 +16,13 @@
     "provider": {
         "gpu0-local": {
             "npm": "@ai-sdk/openai-compatible",
-            "name": "GPU0 (Daily)",
+            "name": "GPU0 (Qwen3.6-35B)",
             "options": {
                 "baseURL": "http://127.0.0.1:11434/v1"
             },
             "models": {
-                "qwen3.6-27b": {
-                    "name": "Qwen3.6-27B-UD-Q4_K_XL.gguf",
+                "qwen3.6-35b": {
+                    "name": "/models/Qwen3.6-35B-A3B-UD-IQ4_XS.gguf",
                     "options": {
                         "cachePromptPrefix": true
                     }
@@ -31,13 +31,13 @@
         },
         "gpu1-local": {
             "npm": "@ai-sdk/openai-compatible",
-            "name": "GPU1 (Qwen3.6-35B-QAT/llama.cpp)",
+            "name": "GPU1 (Ornith-1.0-35B)",
             "options": {
                 "baseURL": "http://127.0.0.1:15433/v1"
             },
             "models": {
-                "qwen3.6-35b": {
-                    "name": "/models/Qwen3.6-35B-A3B-UD-IQ4_XS.gguf",
+                "ornith-35b": {
+                    "name": "/models/deepreinforce-ai_Ornith-1.0-35B-IQ4_XS.gguf",
                     "options": {
                         "cachePromptPrefix": true
                     }

@@ -1,7 +1,7 @@
 services:
-  lla-qwen27b:
+  lla-gpu0:
     image: ghcr.io/ggml-org/llama.cpp:server-cuda
-    container_name: lla-qwen27b
+    container_name: lla-gpu0
     restart: unless-stopped
     runtime: nvidia
     ulimits:
@@ -19,32 +19,29 @@ services:
       - GGML_CUDA_GRAPH_OPT=1
 
     command: >
-      -m /models/Qwen3.6-27B-UD-Q4_K_XL.gguf
-      --mmproj /models/mmproj-Qwen3.6-27B-f16.gguf
+      -m /models/Qwen3.6-35B-A3B-UD-IQ4_XS.gguf
       --host 0.0.0.0
       --port 8080
       --ctx-size 131072
       --cache-type-k q8_0
       --cache-type-v q4_0
       --flash-attn on
-      --image-min-tokens 1024
       --parallel 1
       -ngl 99 -t 8 -tb 4
       -b 2048 -ub 1024
       --mlock
       --no-mmap
-      --no-mmproj-offload
       --spec-type draft-mtp
-      --spec-draft-n-max 3
+      --spec-draft-n-max 2
       --spec-draft-type-k q4_0
       --spec-draft-type-v q4_0
     networks:
       - docker_default
 
 
-  lla-qwen35b:
+  lla-ornith35b:
     image: ghcr.io/ggml-org/llama.cpp:server-cuda
-    container_name: lla-qwen35b
+    container_name: lla-ornith35b
     restart: unless-stopped
     runtime: nvidia
     ulimits:
@@ -62,10 +59,10 @@ services:
       - GGML_CUDA_GRAPH_OPT=1
 
     command: >
-      -m /models/Qwen3.6-35B-A3B-UD-IQ4_XS.gguf
+      -m /models/deepreinforce-ai_Ornith-1.0-35B-IQ4_XS.gguf
       --host 0.0.0.0
       --port 8080
-      --ctx-size 262144
+      --ctx-size 131072
       --cache-type-k q8_0
       --cache-type-v q4_0
       --flash-attn on
@@ -74,10 +71,7 @@ services:
       -b 2048 -ub 1024
       --mlock
       --no-mmap
-      --spec-type draft-mtp
-      --spec-draft-n-max 2
-      --spec-draft-type-k q4_0
-      --spec-draft-type-v q4_0
+      --jinja
     networks:
       - docker_default
 
